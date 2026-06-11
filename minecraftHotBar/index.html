@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 1 — My Minecraft Hotbar</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div id="material"></div>
+  <header class="page-header">
+    <div class="night-mode" onclick="darkMode()">🌙</div>
+    <h1 class="title">My Minecraft Hotbar 🎮</h1>
+  </header>
+  <main class="main-window">
+    <div id="game-space"></div>
+    <div id="bar">
+      <div class="selected-text" id="selectedText">
+        Click a slot to pick an item!
+      </div>
+      <div class="hotbar">
+        <div class="slot" data-item="Dirt" onclick="selectItem(this)">🟫</div>
+        <div class="slot" data-item="Grass Block" onclick="selectItem(this)">🌱</div>
+        <div class="slot" data-item="Stone" onclick="selectItem(this)">⬜</div>
+        <div class="slot" data-item="Wood" onclick="selectItem(this)">🪵</div>
+        <div class="slot" data-item="Sword" onclick="selectItem(this)">⚔️</div>
+        <div class="slot" data-item="Pickaxe" onclick="selectItem(this)">⛏️</div>
+        <div class="slot" data-item="Apple" onclick="selectItem(this)">🍎</div>
+        <div class="slot" data-item="Bread" onclick="selectItem(this)">🍞</div>
+        <div class="slot" data-item="Torch" onclick="selectItem(this)">🔥</div>
+      </div>
+    </div>
+  </main>
+
+
+  <script>
+    const allSlots = document.querySelectorAll('.slot');
+    const selectedText = document.getElementById('selectedText');
+    const gameSpace = document.getElementById('game-space');
+    const nightModeButton = document.querySelector('.night-mode');
+    let selectedMatrial = null;
+    let isNightMode = false;
+
+    function toggleDarkMode() {
+      isNightMode = !isNightMode;
+      updateGameSpaceGradient();
+      nightModeButton.textContent = isNightMode ? '☀️' : '🌙';
+    }
+
+    function updateGameSpaceGradient() {
+      if (isNightMode) {
+        gameSpace.style.background = 'linear-gradient(180deg, #1a1a2e 0%, #16213e 70%, #0f3460 70%, #0f3460 100%)';
+      } else {
+        gameSpace.style.background = 'linear-gradient(180deg, #87CEEB 0%, #87CEEB 70%, #2d5016 70%, #2d5016 100%)';
+      }
+    }
+
+    nightModeButton.addEventListener('click', toggleDarkMode);
+
+    function selectItem(element) {
+      clearSelection();
+      element.style.border = '5px solid #FFD700';
+      element.style.transform = 'scale(1.1)';
+      const itemName = element.getAttribute('data-item');
+      selectedText.textContent = `You selected: ${itemName}`;
+      selectedMatrial = element.textContent;
+      const material = document.getElementById('material');
+      material.textContent = selectedMatrial;
+    }
+    function clearSelection() {
+      for (const slot of allSlots) {
+        slot.style.border = '2px solid';
+        slot.style.borderColor = '#5F5F5F #FFFFFF #FFFFFF #5F5F5F';
+        slot.style.transform = 'scale(1)';
+      }
+    }
+
+    // Make material div follow cursor without CSS positioning
+    const material = document.getElementById('material');
+    const materialRect = material.getBoundingClientRect();
+    const materialCenterX = materialRect.left + materialRect.width / 4;
+    const materialCenterY = materialRect.top + materialRect.height / 3;
+
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX - materialCenterX;
+      const y = e.clientY - materialCenterY;
+      material.style.transform = `translate(${x}px, ${y}px)`;
+    });
+  </script>
+
+</body>
+
+</html>
